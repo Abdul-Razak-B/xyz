@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Shoe Collection | Premium Footwear</title>
+        <!-- Favicon -->
+        <link rel="icon"
+            href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👟</text></svg>">
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <!-- Lucide Icons -->
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet">
+
+        <style>
+            body {
+                font-family: 'Plus Jakarta Sans', sans-serif;
+            }
+
+            /* Custom Scrollbar */
+            ::-webkit-scrollbar {
+                width: 10px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: #ea580c;
+                border-radius: 20px;
+                border: 3px solid #f1f1f1;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #c2410c;
+            }
+
+            /* Animations */
+            @keyframes shoe-float {
+
+                0%,
+                100% {
+                    transform: translateY(0) rotate(-12deg);
+                }
+
+                50% {
+                    transform: translateY(-20px) rotate(-8deg);
+                }
+            }
+
+            .animate-shoe-float {
+                animation: shoe-float 3s ease-in-out infinite;
+            }
+
+            .dropdown-menu {
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(10px);
+                transition: all 0.3s ease;
+            }
+
+            .group:hover .dropdown-menu {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+
+            /* Modal & Drawer Transitions */
+            .overlay {
+                transition: opacity 0.5s ease;
+                pointer-events: none;
+            }
+
+            .overlay.active {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .side-drawer {
+                transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .side-drawer.active {
+                transform: translateX(0);
+            }
+        </style>
+    </head>
+
+    <body class="bg-white text-gray-900 selection:bg-orange-100 selection:text-orange-600">
+
+        <!-- INITIAL LOADER -->
+        <div id="loader" class="fixed inset-0 z-[200] bg-white flex flex-col items-center justify-center p-6">
+            <div class="relative w-64 h-64 mb-12">
+                <div class="absolute inset-0 bg-orange-100 rounded-full blur-3xl opacity-50 animate-pulse"></div>
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=600"
+                    class="w-full h-full object-contain relative z-10 animate-shoe-float" alt="Loading">
+            </div>
+            <div class="w-full max-w-xs space-y-4">
+                <div class="flex justify-between items-end">
+                    <span class="text-xs font-black text-gray-400 uppercase tracking-widest">Optimizing Prices</span>
+                    <span id="loader-price" class="text-2xl font-black text-orange-600">Rs. 99,999</span>
+                </div>
+                <div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                    <div id="loader-progress" class="h-full bg-orange-600 transition-all duration-100"
+                        style="width: 0%"></div>
+                </div>
+                <p class="text-center text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] animate-pulse">
+                    The Shoe Collection <span class="current-year"></span>
+                </p>
+            </div>
+        </div>
+
+        <!-- NAVBAR -->
+        <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <div class="flex items-center gap-12">
+                        <h1 class="text-xl font-bold tracking-tighter text-gray-900 cursor-pointer"
+                            onclick="filterCategory('All')">
+                            THE SHOE <span class="text-orange-600">COLLECTION</span>
+                        </h1>
+                        <div class="hidden lg:flex items-center space-x-2">
+                            <div class="relative group px-4 py-2">
+                                <button
+                                    class="flex items-center gap-1 text-sm font-bold text-gray-700 hover:text-orange-600 transition-colors">
+                                    Categories <i data-lucide="chevron-down"
+                                        class="w-4 h-4 transition-transform group-hover:rotate-180"></i>
+                                </button>
+                                <div
+                                    class="dropdown-menu absolute top-full left-0 mt-2 w-48 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
+                                    <div class="py-2" id="desktop-category-links">
+                                        <!-- JS Generated Categories -->
+                                    </div>
+                                </div>
+                            </div>
+                            <button
+                                class="px-4 py-2 text-sm font-bold text-gray-700 hover:text-orange-600 transition-colors">New
+                                Arrivals</button>
+                            <a href="about.html"
+                                class="px-4 py-2 text-sm font-bold text-gray-700 hover:text-orange-600 transition-colors">About
+                                Us</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 md:gap-4">
+                        <button onclick="toggleCart()"
+                            class="relative p-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-2xl transition-all">
+                            <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                            <span id="cart-badge"
+                                class="hidden absolute top-2 right-2 bg-orange-600 text-white text-[10px] font-bold min-w-[20px] h-5 flex items-center justify-center rounded-full ring-2 ring-white">0</span>
+                        </button>
+                        <button onclick="toggleMobileMenu()"
+                            class="lg:hidden p-3 text-gray-700 hover:bg-gray-100 rounded-2xl">
+                            <i data-lucide="menu" id="mobile-menu-icon" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden lg:hidden border-t border-gray-100 bg-white px-4 py-6 space-y-4">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest px-2">Categories</p>
+                <div class="grid grid-cols-2 gap-2" id="mobile-category-links"></div>
+                <div class="pt-2 px-2">
+                    <a href="about.html"
+                        class="block w-full px-4 py-3 rounded-xl text-sm font-bold text-left bg-gray-50 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-all">About
+                        Us</a>
+                </div>
+            </div>
+        </nav>
+
+        <main>
+            <!-- HERO -->
+            <section class="relative overflow-hidden bg-[#fdfdfd] pt-12 pb-20 md:pt-24 md:pb-32 px-4">
+                <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+                    <div class="flex-1 text-center lg:text-left z-10">
+                        <span
+                            class="inline-block py-2 px-4 bg-orange-100 text-orange-600 text-[10px] font-black uppercase tracking-[0.25em] rounded-xl mb-8">New
+                            Generation <span class="current-year"></span></span>
+                        <h1
+                            class="text-5xl sm:text-7xl lg:text-8xl font-black text-gray-900 leading-[0.95] tracking-tighter mb-8">
+                            PERFECTION <br><span class="text-orange-600 underline decoration-gray-100">IN EVERY
+                                STEP</span>
+                        </h1>
+                        <p class="text-lg md:text-xl text-gray-500 mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                            Experience the intersection of premium materials and futuristic comfort engineering.</p>
+                        <button onclick="scrollToCollection()"
+                            class="w-full sm:w-auto px-10 py-5 bg-gray-900 text-white font-black rounded-2xl hover:bg-black transition-all shadow-2xl flex items-center justify-center gap-2 mx-auto lg:mx-0">
+                            Explore Collection <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <div class="flex-1 relative w-full max-w-xl">
+                        <div class="absolute inset-0 bg-orange-200/30 rounded-full blur-[120px] scale-110"></div>
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=1200"
+                            class="relative z-10 w-full h-auto object-contain drop-shadow-2xl -rotate-12 hover:rotate-0 transition-transform duration-700">
+                    </div>
+                </div>
+            </section>
+
+            <!-- PRODUCTS -->
+            <section class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="collection">
+                <div
+                    class="flex flex-col md:flex-row justify-between items-center md:items-end mb-16 gap-8 text-center md:text-left">
+                    <div>
+                        <h2 class="text-4xl font-black mb-3 tracking-tight uppercase" id="current-category-label">The
+                            All Edit</h2>
+                        <p class="text-gray-500 font-medium">Discover performance art for your feet.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12" id="product-grid"></div>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="bg-gray-900 text-white py-16 px-4">
+            <div class="max-w-7xl mx-auto text-center">
+                <h2 class="text-2xl font-black mb-4 tracking-tighter uppercase">The Shoe Collection</h2>
+                <p class="text-gray-400 text-sm font-bold">Designed by Abdul Razak Bhutto • © <span
+                        class="current-year"></span> All rights reserved.</p>
+            </div>
+        </footer>
+
+        <!-- OVERLAYS: CART DRAWER -->
+        <div id="cart-overlay" class="overlay fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] opacity-0"
+            onclick="toggleCart()"></div>
+        <div id="cart-drawer"
+            class="side-drawer fixed right-0 top-0 h-full w-full max-w-lg bg-white z-[70] shadow-2xl translate-x-full flex flex-col">
+            <div class="p-6 border-b flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <button onclick="checkoutBack()" id="back-btn" class="hidden p-2 hover:bg-gray-100 rounded-full"><i
+                            data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                    <h2 class="text-xl font-black uppercase tracking-tight" id="drawer-title">Your Bag</h2>
+                </div>
+                <button onclick="toggleCart()" class="p-2 hover:bg-red-50 hover:text-red-500 rounded-full"><i
+                        data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-6" id="drawer-content">
+                <!-- Dynamic Content based on step -->
+                <div id="step-bag" class="space-y-6"></div>
+                <div id="step-shipping" class="hidden space-y-4">
+                    <div class="bg-orange-50 p-4 rounded-2xl flex items-center gap-3 mb-6">
+                        <i data-lucide="truck" class="text-orange-600"></i>
+                        <p class="text-sm font-bold text-orange-800">Free Delivery to Daharki Applied</p>
+                    </div>
+                    <input id="form-name"
+                        class="w-full px-5 py-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500"
+                        placeholder="Full Name" value="Abdul Razak Bhutto">
+                    <input id="form-email"
+                        class="w-full px-5 py-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500"
+                        placeholder="Email" value="abdulrazakb63@gmail.com">
+                    <textarea id="form-address"
+                        class="w-full px-5 py-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 h-24"
+                        placeholder="Address">Professor Abdul Hafeez Bhutto House, Mohalla Bhutta, National Highway Road, Besides National Bank Daharki.</textarea>
+                    <input id="form-city"
+                        class="w-full px-5 py-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500"
+                        placeholder="City" value="Daharki">
+                </div>
+                <div id="step-payment" class="hidden space-y-6">
+                    <div class="bg-gray-900 text-white p-6 rounded-[2rem] space-y-8 relative overflow-hidden shadow-xl">
+                        <div class="relative z-10 flex justify-between"><i data-lucide="credit-card"
+                                class="text-orange-500"></i> <span
+                                class="text-xs font-bold tracking-widest italic">PREMIUM MEMBER</span></div>
+                        <div id="card-preview-num" class="relative z-10 text-xl font-mono tracking-widest">•••• ••••
+                            •••• ••••</div>
+                        <div class="relative z-10 flex justify-between text-[10px] uppercase font-bold text-gray-400">
+                            <div><span>Holder</span><br><span id="card-preview-name" class="text-white">Abdul
+                                    Razak</span></div>
+                            <div><span>Expires</span><br><span id="card-preview-expiry" class="text-white">MM/YY</span>
+                            </div>
+                        </div>
+                    </div>
+                    <input id="form-card"
+                        class="w-full px-5 py-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500"
+                        placeholder="Card Number (16 Digits)" maxlength="16">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input id="form-expiry"
+                            class="w-full px-5 py-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500"
+                            placeholder="MM/YY">
+                        <input id="form-cvc"
+                            class="w-full px-5 py-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500"
+                            placeholder="CVC">
+                    </div>
+                </div>
+                <div id="step-success" class="hidden h-full flex flex-col items-center justify-center text-center">
+                    <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-8"><i
+                            data-lucide="check-circle-2" class="w-12 h-12 text-green-600"></i></div>
+                    <h3 class="text-3xl font-black mb-4 uppercase">Thank You!</h3>
+                    <p class="text-gray-500 font-medium px-8">Your order has been placed. We've sent details to your
+                        email.</p>
+                    <button onclick="toggleCart()"
+                        class="mt-12 w-full py-5 bg-gray-900 text-white font-black rounded-2xl">Return to Store</button>
+                </div>
+            </div>
+
+            <div class="p-6 border-t bg-gray-50/50" id="drawer-footer">
+                <div class="flex justify-between items-end mb-6">
+                    <span class="text-lg font-black uppercase tracking-tight">Total</span>
+                    <span id="cart-total" class="text-2xl font-black text-gray-900">Rs. 0</span>
+                </div>
+                <button onclick="checkoutNext()" id="checkout-btn"
+                    class="w-full py-5 bg-orange-600 text-white font-black rounded-2xl shadow-xl flex items-center justify-center gap-2 group">
+                    <span id="btn-text">Proceed to Checkout</span> <i data-lucide="chevron-right"
+                        class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- OVERLAYS: QUICK VIEW MODAL -->
+        <div id="modal-overlay"
+            class="overlay fixed inset-0 bg-black/80 backdrop-blur-md z-[100] opacity-0 flex items-center justify-center p-4">
+            <div
+                class="relative bg-white w-full max-w-4xl rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col lg:flex-row max-h-[90vh]">
+                <button onclick="closeQuickView()"
+                    class="absolute top-6 right-6 z-10 p-3 bg-white rounded-full shadow-lg hover:text-red-500"><i
+                        data-lucide="x" class="w-6 h-6"></i></button>
+                <div class="lg:w-1/2 bg-gray-50"><img id="modal-image" src="" class="w-full h-full object-cover"></div>
+                <div class="lg:w-1/2 p-10 lg:p-16 flex flex-col overflow-y-auto">
+                    <span id="modal-category"
+                        class="px-3 py-1 bg-orange-600 text-white text-[10px] font-black uppercase tracking-widest rounded-full w-fit mb-4"></span>
+                    <h2 id="modal-name" class="text-4xl font-black mb-4 leading-tight"></h2>
+                    <p id="modal-desc" class="text-gray-600 mb-8 leading-relaxed"></p>
+                    <div class="mt-auto flex items-center justify-between gap-8">
+                        <div class="flex flex-col"><span
+                                class="text-xs font-bold text-gray-400 uppercase">Price</span><span id="modal-price"
+                                class="text-3xl font-black"></span></div>
+                        <button id="modal-add-btn"
+                            class="flex-1 py-5 bg-gray-900 text-white font-black rounded-2xl hover:bg-black transition-all">Add
+                            to Bag</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // --- DATA ---
+            const PRODUCTS = [
+                { id: 1, name: "Nebula Runner X", price: 12999, category: "Running", rating: 4.8, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800", desc: "Lightweight, breathable mesh with responsive cushioning." },
+                { id: 2, name: "Urban Stealth Loafer", price: 8900, category: "Casual", rating: 4.5, image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&q=80&w=800", desc: "Premium suede finish with all-day comfort sole." },
+                { id: 3, name: "Apex Trail Blazer", price: 15500, category: "Hiking", rating: 4.9, image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&q=80&w=800", desc: "Rugged outsole and waterproof lining." },
+                { id: 4, name: "Cloud Walker 2.0", price: 11000, category: "Running", rating: 4.7, image: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&q=80&w=800", desc: "Engineered for maximum long-distance comfort." },
+                { id: 5, name: "Vantage Court Pro", price: 9500, category: "Tennis", rating: 4.6, image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=800", desc: "Reinforced toe cap for rapid court movement." },
+                { id: 6, name: "Onyx Street High-Top", price: 13500, category: "Casual", rating: 4.8, image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&q=80&w=800", desc: "Street-ready style meets premium leather." }
+            ];
+            const CATEGORIES = ["All", "Running", "Casual", "Hiking", "Tennis"];
+
+            // --- STATE ---
+            let cart = [];
+            let activeCategory = "All";
+            let checkoutStep = 'bag'; // bag, shipping, payment, success
+
+            // --- DOM ELEMENTS ---
+            const productGrid = document.getElementById('product-grid');
+            const cartBadge = document.getElementById('cart-badge');
+            const cartTotal = document.getElementById('cart-total');
+            const bagStep = document.getElementById('step-bag');
+            const shippingStep = document.getElementById('step-shipping');
+            const paymentStep = document.getElementById('step-payment');
+            const successStep = document.getElementById('step-success');
+
+            // --- LOADER LOGIC ---
+            let loadProgress = 0;
+            let loadPrice = 99999;
+            const loaderInterval = setInterval(() => {
+                loadProgress += 2;
+                loadPrice -= 1999;
+                document.getElementById('loader-progress').style.width = loadProgress + '%';
+                document.getElementById('loader-price').innerText = 'Rs. ' + Math.max(0, loadPrice).toLocaleString();
+
+                if (loadProgress >= 100) {
+                    clearInterval(loaderInterval);
+                    setTimeout(() => {
+                        document.getElementById('loader').classList.add('opacity-0');
+                        setTimeout(() => document.getElementById('loader').remove(), 500);
+                    }, 400);
+                }
+            }, 30);
+
+            // --- NAVIGATION & FILTERING ---
+            function initNav() {
+                const dLink = document.getElementById('desktop-category-links');
+                const mLink = document.getElementById('mobile-category-links');
+                CATEGORIES.forEach(cat => {
+                    const btnD = document.createElement('button');
+                    btnD.className = "w-full text-left px-5 py-3 text-sm transition-colors hover:bg-gray-50 text-gray-600";
+                    btnD.innerText = cat;
+                    btnD.onclick = () => filterCategory(cat);
+                    dLink.appendChild(btnD);
+
+                    const btnM = document.createElement('button');
+                    btnM.className = "px-4 py-3 rounded-xl text-sm font-bold text-left bg-gray-50 text-gray-700";
+                    btnM.innerText = cat;
+                    btnM.onclick = () => { filterCategory(cat); toggleMobileMenu(); };
+                    mLink.appendChild(btnM);
+                });
+            }
+
+            function filterCategory(cat) {
+                activeCategory = cat;
+                document.getElementById('current-category-label').innerText = `The ${cat} Edit`;
+                renderProducts();
+                scrollToCollection();
+            }
+
+            function scrollToCollection() {
+                document.getElementById('collection').scrollIntoView({ behavior: 'smooth' });
+            }
+
+            function toggleMobileMenu() {
+                const menu = document.getElementById('mobile-menu');
+                const icon = document.getElementById('mobile-menu-icon');
+                menu.classList.toggle('hidden');
+                const isHidden = menu.classList.contains('hidden');
+                icon.setAttribute('data-lucide', isHidden ? 'menu' : 'x');
+                lucide.createIcons();
+            }
+
+            // --- PRODUCT RENDERING ---
+            function renderProducts() {
+                productGrid.innerHTML = '';
+                const filtered = activeCategory === "All" ? PRODUCTS : PRODUCTS.filter(p => p.category === activeCategory);
+                filtered.forEach(p => {
+                    const card = `
+                    <div class="group bg-white rounded-[2rem] overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-500">
+                        <div class="aspect-[4/5] overflow-hidden bg-gray-50 relative">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute inset-x-4 bottom-4 translate-y-16 group-hover:translate-y-0 transition-all duration-300">
+                                <button onclick="openQuickView(${p.id})" class="w-full py-4 bg-gray-900/95 backdrop-blur-sm text-white font-bold rounded-2xl text-sm shadow-xl">Quick View</button>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[10px] font-black text-orange-600 uppercase tracking-widest">${p.category}</span>
+                                <div class="flex items-center gap-1 bg-yellow-50 px-2 py-0.5 rounded-full">
+                                    <i data-lucide="star" class="w-3 h-3 fill-yellow-400 text-yellow-400"></i>
+                                    <span class="text-[10px] font-bold text-yellow-700">${p.rating}</span>
+                                </div>
+                            </div>
+                            <h3 class="font-bold text-gray-900 text-lg mb-1">${p.name}</h3>
+                            <p class="text-xl font-black text-gray-900">Rs. ${p.price.toLocaleString()}</p>
+                        </div>
+                    </div>
+                `;
+                    productGrid.insertAdjacentHTML('beforeend', card);
+                });
+                lucide.createIcons();
+            }
+
+            // --- CART & CHECKOUT ---
+            function toggleCart() {
+                document.getElementById('cart-overlay').classList.toggle('active');
+                document.getElementById('cart-drawer').classList.toggle('active');
+            }
+
+            function addToCart(id) {
+                const prod = PRODUCTS.find(p => p.id === id);
+                const exists = cart.find(item => item.id === id);
+                if (exists) exists.qty++;
+                else cart.push({ ...prod, qty: 1 });
+                renderCart();
+                if (!document.getElementById('cart-drawer').classList.contains('active')) toggleCart();
+            }
+
+            function updateQty(id, delta) {
+                const item = cart.find(i => i.id === id);
+                item.qty = Math.max(1, item.qty + delta);
+                renderCart();
+            }
+
+            function removeFromCart(id) {
+                cart = cart.filter(i => i.id !== id);
+                renderCart();
+            }
+
+            function renderCart() {
+                const totalItems = cart.reduce((acc, i) => acc + i.qty, 0);
+                const totalPrice = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+
+                cartBadge.innerText = totalItems;
+                cartBadge.classList.toggle('hidden', totalItems === 0);
+                cartTotal.innerText = `Rs. ${totalPrice.toLocaleString()}`;
+
+                bagStep.innerHTML = cart.length ? '' : `
+                <div class="text-center py-20">
+                    <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto text-gray-200 mb-4"></i>
+                    <p class="text-gray-400">Bag is empty</p>
+                </div>
+            `;
+
+                cart.forEach(i => {
+                    const itemHtml = `
+                    <div class="flex gap-4">
+                        <img src="${i.image}" class="w-20 h-20 rounded-xl object-cover">
+                        <div class="flex-1">
+                            <div class="flex justify-between">
+                                <h4 class="font-bold text-sm">${i.name}</h4>
+                                <button onclick="removeFromCart(${i.id})"><i data-lucide="x" class="w-4 h-4 text-gray-400"></i></button>
+                            </div>
+                            <div class="flex justify-between items-end mt-2">
+                                <div class="flex items-center bg-gray-100 rounded-lg p-1">
+                                    <button onclick="updateQty(${i.id}, -1)" class="px-2"><i data-lucide="minus" class="w-3 h-3"></i></button>
+                                    <span class="w-6 text-center text-xs font-bold">${i.qty}</span>
+                                    <button onclick="updateQty(${i.id}, 1)" class="px-2"><i data-lucide="plus" class="w-3 h-3"></i></button>
+                                </div>
+                                <p class="font-black text-xs">Rs. ${(i.price * i.qty).toLocaleString()}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                    bagStep.insertAdjacentHTML('beforeend', itemHtml);
+                });
+                lucide.createIcons();
+            }
+
+            function checkoutNext() {
+                if (checkoutStep === 'bag') {
+                    if (!cart.length) return;
+                    checkoutStep = 'shipping';
+                } else if (checkoutStep === 'shipping') {
+                    checkoutStep = 'payment';
+                } else if (checkoutStep === 'payment') {
+                    const card = document.getElementById('form-card').value;
+                    if (card.length < 16) return;
+                    checkoutStep = 'success';
+                    cart = [];
+                    renderCart();
+                }
+                updateCheckoutUI();
+            }
+
+            function checkoutBack() {
+                if (checkoutStep === 'shipping') checkoutStep = 'bag';
+                else if (checkoutStep === 'payment') checkoutStep = 'shipping';
+                updateCheckoutUI();
+            }
+
+            function updateCheckoutUI() {
+                const steps = [bagStep, shippingStep, paymentStep, successStep];
+                steps.forEach(s => s.classList.add('hidden'));
+
+                if (checkoutStep === 'bag') {
+                    bagStep.classList.remove('hidden');
+                    document.getElementById('drawer-title').innerText = `Your Bag (${cart.length})`;
+                    document.getElementById('btn-text').innerText = "Proceed to Checkout";
+                    document.getElementById('back-btn').classList.add('hidden');
+                    document.getElementById('drawer-footer').classList.remove('hidden');
+                } else if (checkoutStep === 'shipping') {
+                    shippingStep.classList.remove('hidden');
+                    document.getElementById('drawer-title').innerText = "Shipping";
+                    document.getElementById('btn-text').innerText = "Review & Payment";
+                    document.getElementById('back-btn').classList.remove('hidden');
+                } else if (checkoutStep === 'payment') {
+                    paymentStep.classList.remove('hidden');
+                    document.getElementById('drawer-title').innerText = "Payment";
+                    document.getElementById('btn-text').innerText = "Confirm Order";
+                } else if (checkoutStep === 'success') {
+                    successStep.classList.remove('hidden');
+                    document.getElementById('drawer-title').innerText = "Confirmed";
+                    document.getElementById('drawer-footer').classList.add('hidden');
+                    document.getElementById('back-btn').classList.add('hidden');
+                }
+                lucide.createIcons();
+            }
+
+            // --- QUICK VIEW ---
+            function openQuickView(id) {
+                const p = PRODUCTS.find(x => x.id === id);
+                document.getElementById('modal-image').src = p.image;
+                document.getElementById('modal-name').innerText = p.name;
+                document.getElementById('modal-category').innerText = p.category;
+                document.getElementById('modal-desc').innerText = p.desc;
+                document.getElementById('modal-price').innerText = 'Rs. ' + p.price.toLocaleString();
+                document.getElementById('modal-add-btn').onclick = () => { addToCart(p.id); closeQuickView(); };
+
+                const overlay = document.getElementById('modal-overlay');
+                overlay.classList.add('active');
+            }
+
+            function closeQuickView() {
+                document.getElementById('modal-overlay').classList.remove('active');
+            }
+
+            // --- DYNAMIC YEAR UPDATE ---
+            function updateDynamicYears() {
+                const currentYear = new Date().getFullYear();
+                document.querySelectorAll('.current-year').forEach(el => {
+                    el.textContent = currentYear;
+                });
+            }
+
+            // --- CARD PREVIEW ---
+            document.getElementById('form-card').addEventListener('input', e => {
+                let val = e.target.value;
+                document.getElementById('card-preview-num').innerText = val ? val.match(/.{1,4}/g).join(' ') : '•••• •••• •••• ••••';
+            });
+
+            // --- INIT ---
+            window.onload = () => {
+                updateDynamicYears();
+                initNav();
+                renderProducts();
+                lucide.createIcons();
+            };
+        </script>
+    </body>
+
+</html>

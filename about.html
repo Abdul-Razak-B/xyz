@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>About Us | The Shoe Collection</title>
+        <!-- Favicon -->
+        <link rel="icon"
+            href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👟</text></svg>">
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <!-- Lucide Icons -->
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet">
+
+        <style>
+            body {
+                font-family: 'Plus Jakarta Sans', sans-serif;
+            }
+
+            /* Custom Scrollbar */
+            ::-webkit-scrollbar {
+                width: 10px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: #ea580c;
+                border-radius: 20px;
+                border: 3px solid #f1f1f1;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #c2410c;
+            }
+
+            /* Animations */
+            @keyframes shoe-float {
+
+                0%,
+                100% {
+                    transform: translateY(0) rotate(-12deg);
+                }
+
+                50% {
+                    transform: translateY(-20px) rotate(-8deg);
+                }
+            }
+
+            .animate-shoe-float {
+                animation: shoe-float 3s ease-in-out infinite;
+            }
+
+            .image-reveal {
+                clip-path: inset(0 0 0 0);
+                transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+            }
+        </style>
+    </head>
+
+    <body class="bg-white text-gray-900 selection:bg-orange-100 selection:text-orange-600 antialiased">
+
+        <!-- INITIAL LOADER -->
+        <div id="loader"
+            class="fixed inset-0 z-[200] bg-white flex flex-col items-center justify-center p-6 transition-opacity duration-500">
+            <div class="relative w-64 h-64 mb-12">
+                <div class="absolute inset-0 bg-orange-100 rounded-full blur-3xl opacity-50 animate-pulse"></div>
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=600"
+                    class="w-full h-full object-contain relative z-10 animate-shoe-float" alt="Loading">
+            </div>
+            <div class="w-full max-w-xs space-y-4">
+                <div class="flex justify-between items-end">
+                    <span class="text-xs font-black text-gray-400 uppercase tracking-widest">Loading Our Story</span>
+                    <span id="loader-price" class="text-2xl font-black text-orange-600">Rs. 99,999</span>
+                </div>
+                <div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                    <div id="loader-progress" class="h-full bg-orange-600 transition-all duration-100"
+                        style="width: 0%"></div>
+                </div>
+                <p class="text-center text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] animate-pulse">
+                    The Shoe Collection <span class="current-year"></span>
+                </p>
+            </div>
+        </div>
+
+        <!-- NAVBAR -->
+        <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <div class="flex items-center gap-12">
+                        <a href="index.html" class="text-xl font-bold tracking-tighter text-gray-900 cursor-pointer">
+                            THE SHOE <span class="text-orange-600">COLLECTION</span>
+                        </a>
+                        <div class="hidden lg:flex items-center space-x-6">
+                            <a href="index.html"
+                                class="text-sm font-bold text-gray-700 hover:text-orange-600 transition-colors">Store</a>
+                            <a href="about.html"
+                                class="text-sm font-bold text-orange-600 border-b-2 border-orange-600 py-1">About Us</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <a href="index.html#collection"
+                            class="px-6 py-2.5 bg-gray-900 text-white text-sm font-bold rounded-xl hover:bg-black transition-all">Shop
+                            New Drops</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main>
+            <!-- HERO SECTION -->
+            <section class="relative py-24 lg:py-32 overflow-hidden">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="max-w-3xl">
+                        <span
+                            class="inline-block py-2 px-4 bg-orange-100 text-orange-600 text-[10px] font-black uppercase tracking-[0.25em] rounded-xl mb-8">Established
+                            <span class="current-year"></span></span>
+                        <h1
+                            class="text-5xl sm:text-7xl lg:text-8xl font-black text-gray-900 leading-[0.95] tracking-tighter mb-8">
+                            REDEFINING <br><span class="text-orange-600">THE STRIDE.</span>
+                        </h1>
+                        <p class="text-xl text-gray-500 leading-relaxed font-medium">
+                            At The Shoe Collection, we believe that footwear is the foundation of every great journey.
+                            We don't just design shoes; we engineer performance art.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VISIONARY SECTION (Abdul Razak Bhutto) -->
+            <section class="py-24 bg-gray-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                        <div class="relative">
+                            <div class="aspect-[4/5] bg-gray-200 rounded-[3rem] overflow-hidden shadow-2xl">
+                                <img src="profile-1.jpeg" alt="Abdul Razak Bhutto" class="w-full h-full object-cover"
+                                    onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800'">
+                            </div>
+                            <div
+                                class="absolute -bottom-8 -right-8 bg-orange-600 text-white p-10 rounded-[2.5rem] hidden md:block shadow-2xl">
+                                <p class="text-3xl font-black leading-tight">"Comfort is <br>Non-Negotiable."</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h2 class="text-4xl font-black mb-8 tracking-tight">THE VISIONARY</h2>
+                            <div class="space-y-6 text-gray-600 leading-relaxed font-medium text-lg">
+                                <p>
+                                    Founded by <span class="text-gray-900 font-bold">Abdul Razak Bhutto</span>, a
+                                    computer science visionary from Daharki, The Shoe Collection was born from a
+                                    singular obsession: merging futuristic comfort engineering with timeless aesthetics.
+                                </p>
+                                <p>
+                                    With a background in Computer Science and an eye for architectural design, Abdul
+                                    Razak approached footwear through the lens of performance optimization. He saw an
+                                    opportunity to bring high-tech manufacturing and premium bio-materials to the local
+                                    market and beyond.
+                                </p>
+                                <p>
+                                    "Our headquarters in Daharki serves as our creative hub, where we prototype every
+                                    sole, test every stitch, and ensure that every pair that leaves our doors is a
+                                    testament to quality," says Abdul Razak.
+                                </p>
+                            </div>
+                            <div class="mt-12 grid grid-cols-2 gap-8 pt-12 border-t border-gray-200">
+                                <div>
+                                    <p class="text-3xl font-black text-gray-900 current-year"></p>
+                                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Founding
+                                        Year</p>
+                                </div>
+                                <div>
+                                    <p class="text-3xl font-black text-gray-900">Daharki</p>
+                                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Base of
+                                        Operations</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VALUES SECTION -->
+            <section class="py-32">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-20">
+                    <h2 class="text-4xl font-black mb-4">OUR CORE PILLARS</h2>
+                    <p class="text-gray-500 max-w-xl mx-auto">The principles that guide every design at The Shoe
+                        Collection.</p>
+                </div>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                        <div
+                            class="p-10 bg-white rounded-[2.5rem] border border-gray-100 hover:border-orange-500 transition-all group">
+                            <div
+                                class="w-16 h-16 bg-gray-900 text-white rounded-2xl flex items-center justify-center mb-8 group-hover:bg-orange-600 transition-colors">
+                                <i data-lucide="zap" class="w-8 h-8"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Unmatched Response</h3>
+                            <p class="text-gray-500 leading-relaxed">Utilizing proprietary foam technology that returns
+                                98% of kinetic energy back into your stride.</p>
+                        </div>
+                        <div
+                            class="p-10 bg-white rounded-[2.5rem] border border-gray-100 hover:border-orange-500 transition-all group">
+                            <div
+                                class="w-16 h-16 bg-gray-900 text-white rounded-2xl flex items-center justify-center mb-8 group-hover:bg-orange-600 transition-colors">
+                                <i data-lucide="shield-check" class="w-8 h-8"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Endless Durability</h3>
+                            <p class="text-gray-500 leading-relaxed">Hand-selected leathers and high-tenacity textiles
+                                designed to withstand the test of time and terrain.</p>
+                        </div>
+                        <div
+                            class="p-10 bg-white rounded-[2.5rem] border border-gray-100 hover:border-orange-500 transition-all group">
+                            <div
+                                class="w-16 h-16 bg-gray-900 text-white rounded-2xl flex items-center justify-center mb-8 group-hover:bg-orange-600 transition-colors">
+                                <i data-lucide="leaf" class="w-8 h-8"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Ethics in Motion</h3>
+                            <p class="text-gray-500 leading-relaxed">Committed to sustainable sourcing and fair labor
+                                practices in every step of our supply chain.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA SECTION -->
+            <section class="py-24 px-4 sm:px-6">
+                <div
+                    class="max-w-7xl mx-auto bg-gray-900 rounded-[3rem] p-12 md:p-24 text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-orange-600/20 to-transparent"></div>
+                    <div class="relative z-10">
+                        <h2 class="text-4xl md:text-6xl font-black text-white mb-8 tracking-tight">EXPERIENCE THE
+                            <br>COLLECTION.</h2>
+                        <a href="index.html#collection"
+                            class="inline-flex items-center gap-3 px-10 py-5 bg-orange-600 text-white font-black rounded-2xl hover:bg-orange-700 transition-all shadow-2xl">
+                            Shop All Shoes <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="bg-white border-t border-gray-100 pt-24 pb-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-2xl font-black mb-8 tracking-tighter uppercase">The Shoe Collection</h2>
+                <p class="text-gray-400 text-sm font-bold">Designed by Abdul Razak Bhutto • © <span
+                        class="current-year"></span> All rights reserved.</p>
+                <div class="flex justify-center gap-8 mt-12 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                    <a href="index.html" class="hover:text-gray-900 transition-colors">Home</a>
+                    <a href="about.html" class="text-gray-900">About</a>
+                    <a href="#" class="hover:text-gray-900 transition-colors">Contact</a>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+            // --- DYNAMIC YEAR UPDATE ---
+            function updateDynamicYears() {
+                const currentYear = new Date().getFullYear();
+                document.querySelectorAll('.current-year').forEach(el => {
+                    el.textContent = currentYear;
+                });
+            }
+
+            // --- LOADER LOGIC ---
+            function runLoader() {
+                let loadProgress = 0;
+                let loadPrice = 99999;
+                const loaderInterval = setInterval(() => {
+                    loadProgress += 2;
+                    loadPrice -= 1999;
+
+                    const progressEl = document.getElementById('loader-progress');
+                    const priceEl = document.getElementById('loader-price');
+                    const loaderEl = document.getElementById('loader');
+
+                    if (progressEl) progressEl.style.width = loadProgress + '%';
+                    if (priceEl) priceEl.innerText = 'Rs. ' + Math.max(0, loadPrice).toLocaleString();
+
+                    if (loadProgress >= 100) {
+                        clearInterval(loaderInterval);
+                        setTimeout(() => {
+                            if (loaderEl) {
+                                loaderEl.classList.add('opacity-0');
+                                setTimeout(() => loaderEl.remove(), 500);
+                            }
+                        }, 400);
+                    }
+                }, 30);
+            }
+
+            // --- INIT ---
+            window.onload = () => {
+                updateDynamicYears();
+                runLoader();
+                lucide.createIcons();
+            };
+        </script>
+    </body>
+
+</html>
